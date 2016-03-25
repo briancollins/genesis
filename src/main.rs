@@ -9,10 +9,12 @@ use piston::input::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
+mod app;
+use app::App;
+
 fn main() {
     let opengl = OpenGL::V3_2;
 
-    // Create an Glutin window.
     let mut window: Window = WindowSettings::new(
             "genesis",
             [1024, 768]
@@ -22,7 +24,16 @@ fn main() {
         .build()
         .unwrap();
 
+    let mut app = App::new(GlGraphics::new(opengl));
+
     let mut events = window.events();
     while let Some(e) = events.next(&mut window) {
+        if let Some(r) = e.render_args() {
+            app.render(&r);
+        }
+
+        if let Some(u) = e.update_args() {
+            app.update(&u);
+        }
     }
 }
