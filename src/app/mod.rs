@@ -1,9 +1,10 @@
 extern crate opengl_graphics;
-mod biot;
 
-use opengl_graphics::{ GlGraphics };
+use opengl_graphics::GlGraphics;
 use piston::input::*;
 use graphics;
+
+mod biot;
 
 pub struct App {
     gl: GlGraphics,
