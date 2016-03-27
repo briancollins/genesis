@@ -1,7 +1,7 @@
 extern crate opengl_graphics;
 mod biot;
 
-use opengl_graphics::{ GlGraphics, OpenGL };
+use opengl_graphics::{ GlGraphics };
 use piston::input::*;
 
 pub struct App {
@@ -60,18 +60,21 @@ impl App {
 
     pub fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
-        let square = rectangle::square(0.0, 0.0, 50.0);
+        let square = rectangle::square(-25.0, -25.0, 50.0);
         let biots = self.biots.iter();
         let bgcolor = [17.0 / 255.0, 46.0 / 255.0, 106.0 / 255.0, 1.0];
         let biotcolor = [1.0, 1.0, 1.0, 1.0];
+        let rectangle = Rectangle::new(biotcolor);
+        let line = [50.0, 50.0, 300.0, 300.0];
+        let lineobj = Line::new(biotcolor, 1.0);
 
         self.gl.draw(args.viewport(), |c, gl| {
             clear(bgcolor, gl);
             for b in biots {
-                let transform = c.transform.trans(b.x - square[2], b.y -square[3])
-                    .rot_rad(b.rotation)
-                    .trans(-(square[2] / 2.0), -(square[3] / 2.0));
-                rectangle(biotcolor, square, transform, gl);
+                let transform = c.transform.trans(b.x, b.y)
+                    .rot_rad(b.rotation);
+                rectangle.draw(square, &c.draw_state, transform, gl);
+                lineobj.draw(line, &c.draw_state, transform, gl);
             }
         });
     }

@@ -17,10 +17,10 @@ impl Biot {
         Biot {
             x: rng.gen_range(0.0, 1024.0),
             y: rng.gen_range(0.0, 768.0),
-            dx: rng.gen_range(-0.1, 0.1),
-            dy: rng.gen_range(-0.1, 0.1),
+            dx: rng.gen_range(-0.5, 0.5),
+            dy: rng.gen_range(-0.5, 0.5),
             rotation: 0.0,
-            drotation: rng.gen_range(-0.1, 0.1),
+            drotation: rng.gen_range(-0.05, 0.05),
         }
     }
 
@@ -28,5 +28,12 @@ impl Biot {
         self.x += self.dx;
         self.y += self.dy;
         self.rotation += self.drotation;
+        if self.x > 1024.0 || self.x < 0.0 {
+            self.dx = -self.dx;
+        }
+
+        if self.y > 768.0 || self.y < 0.0 {
+            self.dy = -self.dy;
+        }
     }
 }

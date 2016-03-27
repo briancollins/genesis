@@ -1,0 +1,3 @@
+- [ ] Number of ticks based on time elapsed (try for 64 tick)
+- [ ] Line rendering
+- [ ] Collision detection
