@@ -7,6 +7,9 @@ use graphics::Context;
 use self::rand::Rng;
 use std::f64::consts::PI;
 
+const SEGMENT_MAX: usize = 10;
+const LIFESPAN_MAX: u32 = 50000;
+
 pub struct Biot {
     x: f64,
     y: f64,
@@ -15,7 +18,8 @@ pub struct Biot {
     rotation: f64,
     drotation: f64,
     segment_count: u8,
-    segments: [[f64; 4]; 10],
+    segments: [[f64; 4]; SEGMENT_MAX],
+    pub lifespan: u32
 }
 
 impl Biot {
@@ -28,8 +32,9 @@ impl Biot {
             dy: rng.gen_range(-0.5, 0.5),
             rotation: 0.0,
             drotation: rng.gen_range(-0.05, 0.05),
-            segment_count: rng.gen_range(2, 10),
-            segments: [[0.0; 4]; 10]
+            segment_count: rng.gen_range(2, SEGMENT_MAX as u8),
+            segments: [[0.0; 4]; SEGMENT_MAX],
+            lifespan: rng.gen_range(1, LIFESPAN_MAX),
         };
         biot.generate_lines();
         biot
@@ -46,6 +51,8 @@ impl Biot {
         if self.y > 768.0 || self.y < 0.0 {
             self.dy = -self.dy;
         }
+
+        self.lifespan -= 1;
     }
 
     pub fn generate_lines(&mut self) {

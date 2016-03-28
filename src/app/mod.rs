@@ -58,6 +58,8 @@ impl App {
         for mut b in &mut self.biots {
             b.tick();
         }
+
+        self.biots.retain(|b| b.lifespan > 0);
     }
 
     pub fn render(&mut self, args: &RenderArgs) {
