@@ -6,7 +6,6 @@ use graphics::Context;
 
 use self::rand::Rng;
 use std::f64::consts::PI;
-use std::f64;
 
 pub struct Biot {
     x: f64,
@@ -15,21 +14,25 @@ pub struct Biot {
     dy: f64,
     rotation: f64,
     drotation: f64,
-    segments: u8,
+    segment_count: u8,
+    segments: [[f64; 4]; 10],
 }
 
 impl Biot {
     pub fn new() -> Biot {
         let mut rng = rand::thread_rng();
-        Biot {
+        let mut biot = Biot {
             x: rng.gen_range(0.0, 1024.0),
             y: rng.gen_range(0.0, 768.0),
             dx: rng.gen_range(-0.5, 0.5),
             dy: rng.gen_range(-0.5, 0.5),
             rotation: 0.0,
             drotation: rng.gen_range(-0.05, 0.05),
-            segments: 6
-        }
+            segment_count: rng.gen_range(2, 10),
+            segments: [[0.0; 4]; 10]
+        };
+        biot.generate_lines();
+        biot
     }
 
     pub fn tick(&mut self) {
@@ -45,20 +48,28 @@ impl Biot {
         }
     }
 
+    pub fn generate_lines(&mut self) {
+        let line_length = 20.0;
+
+        for n in 0..self.segment_count {
+            let fraction = n as f64 / self.segment_count as f64;
+            let line = [
+                0.0, 0.0,
+                (PI * 2.0 * fraction).sin() * line_length,
+                (PI * 2.0 * fraction).cos() * line_length];
+            self.segments[n as usize] = line;
+        }
+    }
+
     pub fn draw(&self, c: Context, gl: &mut GlGraphics) {
         use graphics::*;
         let biotcolor = [1.0, 1.0, 1.0, 1.0];
-        let lineobj = Line::new(biotcolor, 0.5);
+        let line = Line::new(biotcolor, 0.5);
         let transform = c.transform.trans(self.x, self.y)
             .rot_rad(self.rotation);
 
-        for n in 0..self.segments {
-            let fraction = n as f64 / self.segments as f64;
-            let line = [
-                0.0, 0.0,
-                (PI * 2.0 * fraction).sin() * 10.0,
-                (PI * 2.0 * fraction).cos() * 10.0];
-            lineobj.draw(line, &c.draw_state, transform, gl);
+        for n in 0..self.segment_count {
+            line.draw(self.segments[n as usize], &c.draw_state, transform, gl);
         }
     }
 }
