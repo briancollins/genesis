@@ -2,6 +2,14 @@
 - [ ] Line rendering
 - [ ] Collision detection
 
+Next:
+- [ ] Segment types/colors
+- [ ] Basic birth/death
+- [ ] Random genetics
+
+Backlog:
+- [ ] Second/third segment layer
+
 Possible genes:
 - Lifespan
 - Reproduction starting age
@@ -17,4 +25,6 @@ Possible genes:
 - Mutation rate
 - Mutation type (bit flip, segment flip, whatever)
 - Protected genes (means these genes require two mutations to change)
+- Friction level
+- Bounciness
 
